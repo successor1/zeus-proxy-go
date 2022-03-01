@@ -9,6 +9,7 @@ import (
 	"github.com/theQRL/walletd-rest-proxy/qrl_proto"
     "time"
 	"google.golang.org/protobuf/encoding/protojson"
+	"encoding/hex"
 )
 
 var connMainnet *grpc.ClientConn
@@ -17,6 +18,29 @@ var connTestnet *grpc.ClientConn
 var errTestnet error
 var clientMainnet qrl_proto.PublicAPIClient 
 var clientTestnet qrl_proto.PublicAPIClient
+
+func GetStatsMainnet() string {
+	if errMainnet != nil {
+		glog.Fatalf("failed connecting to server: %s", errMainnet)
+	}
+
+	// Create a User service Client on the connection.
+	ctxMainnet, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	// GetStats Mainnet
+	GetStatsRespMainnet, err := clientMainnet.GetStats(ctxMainnet, &qrl_proto.GetStatsReq{})
+	if err != nil {
+		glog.Fatalf("%v",err)
+	}
+
+	// Serialize protobuf to json
+	GetStatsRespMainnetSerialized, err := protojson.Marshal(GetStatsRespMainnet)
+	if err != nil {
+		glog.Fatalf("%v",err)
+	}
+	return string(GetStatsRespMainnetSerialized)
+}
 
 func GetStatsTestnet() string{
 	// Open a connection to the testnet server.
@@ -34,7 +58,7 @@ func GetStatsTestnet() string{
 		glog.Fatalf("%v",err)
 	}
 
-	// Serialize protobuf to json Testnet
+	// Serialize protobuf to json
 	GetStatsRespTestnetSerialized, err := protojson.Marshal(GetStatsRespTestnet)
 	if err != nil {
 		glog.Fatalf("%v",err)
@@ -42,7 +66,7 @@ func GetStatsTestnet() string{
 	return string(GetStatsRespTestnetSerialized)
 }
 
-func GetStatsMainnet() string {
+func GetBalanceMainnet(qaddress string) string {
 	if errMainnet != nil {
 		glog.Fatalf("failed connecting to server: %s", errMainnet)
 	}
@@ -51,18 +75,45 @@ func GetStatsMainnet() string {
 	ctxMainnet, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	// GetStats Mainnet
-	GetStatsRespMainnet, err := clientMainnet.GetStats(ctxMainnet, &qrl_proto.GetStatsReq{})
+	binAddress, err := hex.DecodeString(qaddress[1:])
+
+	// GetBalance Mainnet
+	GetBalanceRespMainnet, err := clientMainnet.GetBalance(ctxMainnet, &qrl_proto.GetBalanceReq{Address:binAddress})
 	if err != nil {
 		glog.Fatalf("%v",err)
 	}
 
-	// Serialize protobuf to json Mainnet
-	GetStatsRespMainnetSerialized, err := protojson.Marshal(GetStatsRespMainnet)
+	// Serialize protobuf to json
+	GetBalanceRespMainnetSerialized, err := protojson.Marshal(GetBalanceRespMainnet)
 	if err != nil {
 		glog.Fatalf("%v",err)
 	}
-	return string(GetStatsRespMainnetSerialized)
+	return string(GetBalanceRespMainnetSerialized)
+}
+
+func GetBalanceTestnet(qaddress string) string {
+	if errMainnet != nil {
+		glog.Fatalf("failed connecting to server: %s", errMainnet)
+	}
+
+	// Create a User service Client on the connection.
+	ctxTestnet, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	binAddress, err := hex.DecodeString(qaddress[1:])
+
+	// GetBalance Testnet
+	GetBalanceRespTestnet, err := clientTestnet.GetBalance(ctxTestnet, &qrl_proto.GetBalanceReq{Address:binAddress})
+	if err != nil {
+		glog.Fatalf("%v",err)
+	}
+
+	// Serialize protobuf to json
+	GetBalanceRespTestnetSerialized, err := protojson.Marshal(GetBalanceRespTestnet)
+	if err != nil {
+		glog.Fatalf("%v",err)
+	}
+	return string(GetBalanceRespTestnetSerialized)
 }
 
 func main() {
@@ -83,6 +134,11 @@ func main() {
 		mainnet.GET("/GetStats", func(c *gin.Context) {
 			c.Writer.Header().Set("Content-Type", "application/json")
 			c.String(http.StatusOK, "%v", GetStatsMainnet())
+		})
+		mainnet.GET("/GetBalance/:qaddress", func(c *gin.Context) {
+			qaddress := c.Param("qaddress")
+			c.Writer.Header().Set("Content-Type", "application/json")
+			c.String(http.StatusOK, "%v", GetBalanceMainnet(qaddress))
 		})	
 	}
 
@@ -92,6 +148,11 @@ func main() {
 		testnet.GET("/GetStats", func(c *gin.Context) {
 			c.Writer.Header().Set("Content-Type", "application/json")
 			c.String(http.StatusOK, "%v", GetStatsTestnet())
+		})
+		testnet.GET("/GetBalance/:qaddress", func(c *gin.Context) {
+			qaddress := c.Param("qaddress")
+			c.Writer.Header().Set("Content-Type", "application/json")
+			c.String(http.StatusOK, "%v", GetBalanceTestnet(qaddress))
 		})	
 	}
 
