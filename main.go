@@ -116,6 +116,97 @@ func GetBalanceTestnet(qaddress string) string {
 	return string(GetBalanceRespTestnetSerialized)
 }
 
+func GetHeightMainnet() string {
+	if errMainnet != nil {
+		glog.Fatalf("failed connecting to server: %s", errMainnet)
+	}
+
+	// Create a User service Client on the connection.
+	ctxMainnet, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	// GetHeight Mainnet
+	GetHeightRespMainnet, err := clientMainnet.GetHeight(ctxMainnet, &qrl_proto.GetHeightReq{})
+	if err != nil {
+		glog.Fatalf("%v",err)
+	}
+
+	// Serialize protobuf to json
+	GetHeightRespMainnetSerialized, err := protojson.Marshal(GetHeightRespMainnet)
+	if err != nil {
+		glog.Fatalf("%v",err)
+	}
+	return string(GetHeightRespMainnetSerialized)
+}
+
+func GetHeightTestnet() string {
+	if errMainnet != nil {
+		glog.Fatalf("failed connecting to server: %s", errMainnet)
+	}
+
+	// Create a User service Client on the connection.
+	ctxTestnet, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	// GetHeight Testnet
+	GetHeightRespTestnet, err := clientTestnet.GetHeight(ctxTestnet, &qrl_proto.GetHeightReq{})
+	if err != nil {
+		glog.Fatalf("%v",err)
+	}
+
+	// Serialize protobuf to json
+	GetHeightRespTestnetSerialized, err := protojson.Marshal(GetHeightRespTestnet)
+	if err != nil {
+		glog.Fatalf("%v",err)
+	}
+	return string(GetHeightRespTestnetSerialized)
+}
+
+func GetNodeStateMainnet() string {
+	if errMainnet != nil {
+		glog.Fatalf("failed connecting to server: %s", errMainnet)
+	}
+
+	// Create a User service Client on the connection.
+	ctxMainnet, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	// GetNodeState Mainnet
+	GetNodeStateRespMainnet, err := clientMainnet.GetNodeState(ctxMainnet, &qrl_proto.GetNodeStateReq{})
+	if err != nil {
+		glog.Fatalf("%v",err)
+	}
+
+	// Serialize protobuf to json
+	GetNodeStateRespMainnetSerialized, err := protojson.Marshal(GetNodeStateRespMainnet)
+	if err != nil {
+		glog.Fatalf("%v",err)
+	}
+	return string(GetNodeStateRespMainnetSerialized)
+}
+
+func GetNodeStateTestnet() string {
+	if errMainnet != nil {
+		glog.Fatalf("failed connecting to server: %s", errMainnet)
+	}
+
+	// Create a User service Client on the connection.
+	ctxTestnet, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	// GetNodeState Testnet
+	GetNodeStateRespTestnet, err := clientTestnet.GetNodeState(ctxTestnet, &qrl_proto.GetNodeStateReq{})
+	if err != nil {
+		glog.Fatalf("%v",err)
+	}
+
+	// Serialize protobuf to json
+	GetNodeStateRespTestnetSerialized, err := protojson.Marshal(GetNodeStateRespTestnet)
+	if err != nil {
+		glog.Fatalf("%v",err)
+	}
+	return string(GetNodeStateRespTestnetSerialized)
+}
 func main() {
 	// Open a connection to the mainnet server.
 	connMainnet, errMainnet = grpc.Dial("mainnet-1.automated.theqrl.org:19009", grpc.WithInsecure())
@@ -139,7 +230,15 @@ func main() {
 			qaddress := c.Param("qaddress")
 			c.Writer.Header().Set("Content-Type", "application/json")
 			c.String(http.StatusOK, "%v", GetBalanceMainnet(qaddress))
-		})	
+		})
+		mainnet.GET("/GetHeight", func(c *gin.Context) {
+			c.Writer.Header().Set("Content-Type", "application/json")
+			c.String(http.StatusOK, "%v", GetHeightMainnet())
+		})
+		mainnet.GET("/GetNodeState", func(c *gin.Context) {
+			c.Writer.Header().Set("Content-Type", "application/json")
+			c.String(http.StatusOK, "%v", GetNodeStateMainnet())
+		})
 	}
 
 	// Simple group: testnet
@@ -154,6 +253,14 @@ func main() {
 			c.Writer.Header().Set("Content-Type", "application/json")
 			c.String(http.StatusOK, "%v", GetBalanceTestnet(qaddress))
 		})	
+		testnet.GET("/GetHeight", func(c *gin.Context) {
+			c.Writer.Header().Set("Content-Type", "application/json")
+			c.String(http.StatusOK, "%v", GetHeightTestnet())
+		})
+		testnet.GET("/GetNodeState", func(c *gin.Context) {
+			c.Writer.Header().Set("Content-Type", "application/json")
+			c.String(http.StatusOK, "%v", GetNodeStateTestnet())
+		})
 	}
 
 	router.Run(":8080")
