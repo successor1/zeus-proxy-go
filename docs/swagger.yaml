@@ -1,0 +1,18 @@
+basePath: /mainnet
+info:
+  contact: {}
+paths:
+  /mainnet/GetStats:
+    get:
+      consumes:
+      - application/json
+      description: do ping
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: ping example
+      tags:
+      - mainnet
+swagger: "2.0"

@@ -4,12 +4,15 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"github.com/golang/glog"
-    "golang.org/x/net/context"
+	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"github.com/theQRL/walletd-rest-proxy/qrl_proto"
-    "time"
+	"time"
 	"google.golang.org/protobuf/encoding/protojson"
 	"encoding/hex"
+	docs "github.com/successor1/zeus-proxy-go/docs"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 var connMainnet *grpc.ClientConn
@@ -19,6 +22,18 @@ var errTestnet error
 var clientMainnet qrl_proto.PublicAPIClient 
 var clientTestnet qrl_proto.PublicAPIClient
 
+
+// @BasePath /mainnet
+
+// PingExample godoc
+// @Summary ping example
+// @Schemes
+// @Description do ping
+// @Tags mainnet
+// @Accept json
+// @Produce json
+// @Success 200
+// @Router /mainnet/GetStats [get]
 func GetStatsMainnet() string {
 	if errMainnet != nil {
 		glog.Fatalf("failed connecting to server: %s", errMainnet)
@@ -207,6 +222,7 @@ func GetNodeStateTestnet() string {
 	}
 	return string(GetNodeStateRespTestnetSerialized)
 }
+
 func main() {
 	// Open a connection to the mainnet server.
 	connMainnet, errMainnet = grpc.Dial("mainnet-1.automated.theqrl.org:19009", grpc.WithInsecure())
@@ -219,9 +235,11 @@ func main() {
 
 	router := gin.Default()
 
+	docs.SwaggerInfo.BasePath = "/mainnet"
+
 	// Simple group: mainnet
 	mainnet := router.Group("/mainnet")
-	{
+	{	
 		mainnet.GET("/GetStats", func(c *gin.Context) {
 			c.Writer.Header().Set("Content-Type", "application/json")
 			c.String(http.StatusOK, "%v", GetStatsMainnet())
@@ -263,5 +281,6 @@ func main() {
 		})
 	}
 
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	router.Run(":8080")
 }
