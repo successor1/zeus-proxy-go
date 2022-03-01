@@ -11,31 +11,69 @@ import (
 	"google.golang.org/protobuf/encoding/protojson"
 )
 
+var connMainnet *grpc.ClientConn
+var errMainnet error
+var connTestnet *grpc.ClientConn 
+var errTestnet error
+var clientMainnet qrl_proto.PublicAPIClient 
+var clientTestnet qrl_proto.PublicAPIClient
 
-func main() {
-	// Open a connection to the server.
-	conn, err := grpc.Dial("testnet-1.automated.theqrl.org:19009", grpc.WithInsecure())
-	if err != nil {
-		glog.Fatalf("failed connecting to server: %s", err)
+func GetStatsTestnet() string{
+	// Open a connection to the testnet server.
+	if errTestnet != nil {
+		glog.Fatalf("failed connecting to server: %s", errTestnet)
 	}
-	defer conn.Close()
  
 	// Create a User service Client on the connection.
-	client := qrl_proto.NewPublicAPIClient(conn)
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctxTestnet, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	// GetStats
-	response, err := client.GetStats(ctx, &qrl_proto.GetStatsReq{})
+	// GetStats Testnet
+	GetStatsRespTestnet, err := clientTestnet.GetStats(ctxTestnet, &qrl_proto.GetStatsReq{})
 	if err != nil {
 		glog.Fatalf("%v",err)
 	}
 
-	// Serialize protobuf to json
-	b, err := protojson.Marshal(response)
+	// Serialize protobuf to json Testnet
+	GetStatsRespTestnetSerialized, err := protojson.Marshal(GetStatsRespTestnet)
 	if err != nil {
 		glog.Fatalf("%v",err)
 	}
+	return string(GetStatsRespTestnetSerialized)
+}
+
+func GetStatsMainnet() string {
+	if errMainnet != nil {
+		glog.Fatalf("failed connecting to server: %s", errMainnet)
+	}
+
+	// Create a User service Client on the connection.
+	ctxMainnet, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	// GetStats Mainnet
+	GetStatsRespMainnet, err := clientMainnet.GetStats(ctxMainnet, &qrl_proto.GetStatsReq{})
+	if err != nil {
+		glog.Fatalf("%v",err)
+	}
+
+	// Serialize protobuf to json Mainnet
+	GetStatsRespMainnetSerialized, err := protojson.Marshal(GetStatsRespMainnet)
+	if err != nil {
+		glog.Fatalf("%v",err)
+	}
+	return string(GetStatsRespMainnetSerialized)
+}
+
+func main() {
+	// Open a connection to the mainnet server.
+	connMainnet, errMainnet = grpc.Dial("mainnet-1.automated.theqrl.org:19009", grpc.WithInsecure())
+	connTestnet, errTestnet = grpc.Dial("testnet-1.automated.theqrl.org:19009", grpc.WithInsecure())
+	clientMainnet = qrl_proto.NewPublicAPIClient(connMainnet)
+	clientTestnet = qrl_proto.NewPublicAPIClient(connTestnet)
+
+	defer connMainnet.Close()
+	defer connTestnet.Close()
 
 	router := gin.Default()
 
@@ -44,7 +82,7 @@ func main() {
 	{
 		mainnet.GET("/GetStats", func(c *gin.Context) {
 			c.Writer.Header().Set("Content-Type", "application/json")
-			c.String(http.StatusOK, "%v", string(b))
+			c.String(http.StatusOK, "%v", GetStatsMainnet())
 		})	
 	}
 
@@ -53,7 +91,7 @@ func main() {
 	{
 		testnet.GET("/GetStats", func(c *gin.Context) {
 			c.Writer.Header().Set("Content-Type", "application/json")
-			c.String(http.StatusOK, "%v", string(b))
+			c.String(http.StatusOK, "%v", GetStatsTestnet())
 		})	
 	}
 
