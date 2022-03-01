@@ -18,7 +18,7 @@ const docTemplate = `{
     "paths": {
         "/mainnet/GetStats": {
             "get": {
-                "description": "do ping",
+                "description": "GetStats gRPC",
                 "consumes": [
                     "application/json"
                 ],
@@ -28,7 +28,7 @@ const docTemplate = `{
                 "tags": [
                     "mainnet"
                 ],
-                "summary": "ping example",
+                "summary": "GetStats for Mainnet",
                 "responses": {
                     "200": {
                         "description": ""

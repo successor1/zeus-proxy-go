@@ -6,7 +6,7 @@ import (
 	"github.com/golang/glog"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
-	"github.com/theQRL/walletd-rest-proxy/qrl_proto"
+	"github.com/successor1/zeus-proxy-go/qrl_proto"
 	"time"
 	"google.golang.org/protobuf/encoding/protojson"
 	"encoding/hex"
@@ -26,9 +26,9 @@ var clientTestnet qrl_proto.PublicAPIClient
 // @BasePath /mainnet
 
 // PingExample godoc
-// @Summary ping example
+// @Summary GetStats for Mainnet
 // @Schemes
-// @Description do ping
+// @Description GetStats gRPC
 // @Tags mainnet
 // @Accept json
 // @Produce json
@@ -235,7 +235,7 @@ func main() {
 
 	router := gin.Default()
 
-	docs.SwaggerInfo.BasePath = "/mainnet"
+	docs.SwaggerInfo.BasePath = "/"
 
 	// Simple group: mainnet
 	mainnet := router.Group("/mainnet")

@@ -6,13 +6,13 @@ paths:
     get:
       consumes:
       - application/json
-      description: do ping
+      description: GetStats gRPC
       produces:
       - application/json
       responses:
         "200":
           description: ""
-      summary: ping example
+      summary: GetStats for Mainnet
       tags:
       - mainnet
 swagger: "2.0"
