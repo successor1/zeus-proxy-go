@@ -1,7 +1,51 @@
-basePath: /mainnet
+basePath: /testnet
 info:
   contact: {}
 paths:
+  /mainnet/GetBalance/{qaddress}:
+    get:
+      consumes:
+      - application/json
+      description: GetBalance gRPC
+      parameters:
+      - description: QRL address
+        in: path
+        name: qaddress
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: GetBalance for mainnet
+      tags:
+      - mainnet
+  /mainnet/GetHeight:
+    get:
+      consumes:
+      - application/json
+      description: GetHeight gRPC
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: GetHeight for mainnet
+      tags:
+      - mainnet
+  /mainnet/GetNodeState:
+    get:
+      consumes:
+      - application/json
+      description: GetNodeState gRPC
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: GetNodeState for mainnet
+      tags:
+      - mainnet
   /mainnet/GetStats:
     get:
       consumes:
@@ -15,4 +59,61 @@ paths:
       summary: GetStats for Mainnet
       tags:
       - mainnet
+  /testnet/GetBalance/{qaddress}:
+    get:
+      consumes:
+      - application/json
+      description: GetBalance gRPC
+      parameters:
+      - description: QRL address
+        in: path
+        name: qaddress
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: GetBalance for testnet
+      tags:
+      - testnet
+  /testnet/GetHeight:
+    get:
+      consumes:
+      - application/json
+      description: GetHeight gRPC
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: GetHeight for testnet
+      tags:
+      - testnet
+  /testnet/GetNodeState:
+    get:
+      consumes:
+      - application/json
+      description: GetNodeState gRPC
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: GetNodeState for testnet
+      tags:
+      - testnet
+  /testnet/GetStats:
+    get:
+      consumes:
+      - application/json
+      description: GetStats gRPC
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: GetStats for testnet
+      tags:
+      - testnet
 swagger: "2.0"

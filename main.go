@@ -57,6 +57,17 @@ func GetStatsMainnet() string {
 	return string(GetStatsRespMainnetSerialized)
 }
 
+// @BasePath /testnet
+
+// PingExample godoc
+// @Summary GetStats for testnet
+// @Schemes
+// @Description GetStats gRPC
+// @Tags testnet
+// @Accept json
+// @Produce json
+// @Success 200
+// @Router /testnet/GetStats [get]
 func GetStatsTestnet() string{
 	// Open a connection to the testnet server.
 	if errTestnet != nil {
@@ -81,6 +92,18 @@ func GetStatsTestnet() string{
 	return string(GetStatsRespTestnetSerialized)
 }
 
+// @BasePath /mainnet
+
+// PingExample godoc
+// @Summary GetBalance for mainnet
+// @Schemes
+// @Description GetBalance gRPC
+// @Tags mainnet
+// @Accept json
+// @Param  qaddress    path     string  false  "QRL address"
+// @Produce json
+// @Success 200
+// @Router /mainnet/GetBalance/{qaddress} [get]
 func GetBalanceMainnet(qaddress string) string {
 	if errMainnet != nil {
 		glog.Fatalf("failed connecting to server: %s", errMainnet)
@@ -106,6 +129,18 @@ func GetBalanceMainnet(qaddress string) string {
 	return string(GetBalanceRespMainnetSerialized)
 }
 
+// @BasePath /testnet
+
+// PingExample godoc
+// @Summary GetBalance for testnet
+// @Schemes
+// @Description GetBalance gRPC
+// @Tags testnet
+// @Accept json
+// @Param  qaddress    path     string  false  "QRL address"
+// @Produce json
+// @Success 200
+// @Router /testnet/GetBalance/{qaddress} [get]
 func GetBalanceTestnet(qaddress string) string {
 	if errMainnet != nil {
 		glog.Fatalf("failed connecting to server: %s", errMainnet)
@@ -131,6 +166,17 @@ func GetBalanceTestnet(qaddress string) string {
 	return string(GetBalanceRespTestnetSerialized)
 }
 
+// @BasePath /mainnet
+
+// PingExample godoc
+// @Summary GetHeight for mainnet
+// @Schemes
+// @Description GetHeight gRPC
+// @Tags mainnet
+// @Accept json
+// @Produce json
+// @Success 200
+// @Router /mainnet/GetHeight [get]
 func GetHeightMainnet() string {
 	if errMainnet != nil {
 		glog.Fatalf("failed connecting to server: %s", errMainnet)
@@ -154,6 +200,17 @@ func GetHeightMainnet() string {
 	return string(GetHeightRespMainnetSerialized)
 }
 
+// @BasePath /testnet
+
+// PingExample godoc
+// @Summary GetHeight for testnet
+// @Schemes
+// @Description GetHeight gRPC
+// @Tags testnet
+// @Accept json
+// @Produce json
+// @Success 200
+// @Router /testnet/GetHeight [get]
 func GetHeightTestnet() string {
 	if errMainnet != nil {
 		glog.Fatalf("failed connecting to server: %s", errMainnet)
@@ -177,6 +234,17 @@ func GetHeightTestnet() string {
 	return string(GetHeightRespTestnetSerialized)
 }
 
+// @BasePath /mainnet
+
+// PingExample godoc
+// @Summary GetNodeState for mainnet
+// @Schemes
+// @Description GetNodeState gRPC
+// @Tags mainnet
+// @Accept json
+// @Produce json
+// @Success 200
+// @Router /mainnet/GetNodeState [get]
 func GetNodeStateMainnet() string {
 	if errMainnet != nil {
 		glog.Fatalf("failed connecting to server: %s", errMainnet)
@@ -200,6 +268,17 @@ func GetNodeStateMainnet() string {
 	return string(GetNodeStateRespMainnetSerialized)
 }
 
+// @BasePath /testnet
+
+// PingExample godoc
+// @Summary GetNodeState for testnet
+// @Schemes
+// @Description GetNodeState gRPC
+// @Tags testnet
+// @Accept json
+// @Produce json
+// @Success 200
+// @Router /testnet/GetNodeState [get]
 func GetNodeStateTestnet() string {
 	if errMainnet != nil {
 		glog.Fatalf("failed connecting to server: %s", errMainnet)

@@ -16,6 +16,74 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/mainnet/GetBalance/{qaddress}": {
+            "get": {
+                "description": "GetBalance gRPC",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "mainnet"
+                ],
+                "summary": "GetBalance for mainnet",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "QRL address",
+                        "name": "qaddress",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/mainnet/GetHeight": {
+            "get": {
+                "description": "GetHeight gRPC",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "mainnet"
+                ],
+                "summary": "GetHeight for mainnet",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/mainnet/GetNodeState": {
+            "get": {
+                "description": "GetNodeState gRPC",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "mainnet"
+                ],
+                "summary": "GetNodeState for mainnet",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/mainnet/GetStats": {
             "get": {
                 "description": "GetStats gRPC",
@@ -35,6 +103,94 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/testnet/GetBalance/{qaddress}": {
+            "get": {
+                "description": "GetBalance gRPC",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "testnet"
+                ],
+                "summary": "GetBalance for testnet",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "QRL address",
+                        "name": "qaddress",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/testnet/GetHeight": {
+            "get": {
+                "description": "GetHeight gRPC",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "testnet"
+                ],
+                "summary": "GetHeight for testnet",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/testnet/GetNodeState": {
+            "get": {
+                "description": "GetNodeState gRPC",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "testnet"
+                ],
+                "summary": "GetNodeState for testnet",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/testnet/GetStats": {
+            "get": {
+                "description": "GetStats gRPC",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "testnet"
+                ],
+                "summary": "GetStats for testnet",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
         }
     }
 }`
@@ -43,7 +199,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "",
 	Host:             "",
-	BasePath:         "/mainnet",
+	BasePath:         "/testnet",
 	Schemes:          []string{},
 	Title:            "",
 	Description:      "",
